@@ -1,9 +1,0 @@
-injury = {
-           'injuries_total': row['INJURIES_TOTAL'],
-           'injuries_fatal': row['INJURIES_FATAL']
-       }
-accident_area = {
-            'beet_of_occurrence': row['BEAT_OF_OCCURRENCE'],
-            'crash_date': row['CRASH_DATE'],
-            'contributory_cause': row['PRIM_CONTRIBUTORY_CAUSE'],
-            'injury_id': injury_id

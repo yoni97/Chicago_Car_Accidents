@@ -44,8 +44,8 @@ def get_crash_stats(beat):
         {"$lookup": {'from': 'accidents_area', 'localField': 'injury_id', 'foreignField': '_id', 'as': 'beat'}},
         {'$match': {'beat.beet_of_occurrence': beat}},
         {'$project':{'_id':0, 'injury_id':0, 'accidents_area._id': 0}},
-        {'$group':{'_id':None,
-                   'injuries_total':{'$sum':'$injuries.injuries_total'},
+            {'$group':{'_id':None,
+                'injuries_total':{'$sum':'$injuries.injuries_total'},
                    'injuries_fatal': {'$sum': '$injuries.injuries_fatal'},
                    'total_non_fatal_injuries': {'$sum': {'$subtract': ['$injuries.injuries_total', '$injuries.injuries_fatal']}},
                    'crashes': {'$push': {'crash': '$$ROOT'}}}},
@@ -53,56 +53,46 @@ def get_crash_stats(beat):
     ]))
     return crashes_list
 
-# injury = {
-#            'injuries_total'
-#            'injuries_fatal'
-#        }
-# accident_area = {
-#             'beet_of_occurrence'
-#             'crash_date'
-#             'contributory_cause'
-#             'injury_id': injury_id
 
 
 # def get_crash_stats(beat):
 #     crashes_list = list(injuries.aggregate([
 #         {
 #             "$lookup": {
-#                 'from': 'accidents',  # אם זה הקולקציה שאתה רוצה לחבר
-#                 'localField': 'injury_id',  # המפתח המקומי בקולקציית 'injuries'
-#                 'foreignField': 'injury_id',  # המפתח בקולקציית 'accidents'
-#                 'as': 'accident_info'  # שם התוצאה שתכיל את המידע המשותף
+#                 'from': 'accidents',
+#                 'localField': 'injury_id',
+#                 'foreignField': 'injury_id',
+#                 'as': 'accident_info'
 #             }
 #         },
 #         {
 #             "$unwind": {
-#                 "path": "$accident_info",  # מפריד את המידע מהקולקציה 'accidents'
-#                 "preserveNullAndEmptyArrays": True  # שומר על ערכים ריקים
+#                 "path": "$accident_info",
+#                 "preserveNullAndEmptyArrays": True
 #             }
 #         },
 #         {
 #             "$match": {
-#                 'accident_info.beet_of_occurrence': beat  # פילטר לתאונות באזור המבוקש
+#                 'accident_info.beet_of_occurrence': beat
 #             }
 #         },
 #         {
 #             "$group": {
 #                 '_id': None,
-#                 'injuries_total': {'$sum': '$injuries_total'},  # סה"כ פגיעות
-#                 'injuries_fatal': {'$sum': '$injuries_fatal'},  # פגיעות קטלניות
+#                 'injuries_total': {'$sum': '$injuries_total'},
+#                 'injuries_fatal': {'$sum': '$injuries_fatal'},
 #                 'total_non_fatal_injuries': {
-#                     '$sum': {'$subtract': ['$injuries_total', '$injuries_fatal']}  # חישוב פגיעות לא קטלניות
+#                     '$sum': {'$subtract': ['$injuries_total', '$injuries_fatal']}
 #                 },
 #                 'crashes': {'$push': {
-#                     'crash_date': '$accident_info.crash_date',  # תאריך התאונה
-#                     'contributory_cause': '$accident_info.contributory_cause',  # סיבת התאונה
-#                     'injury_id': '$injury_id'  # מזהה הפגיעה
-#                 }}
+#                     'crash_date': '$accident_info.crash_date',
+#                     'contributory_cause': '$accident_info.contributory_cause',
+#                     'injury_id': '$injury_id'
 #             }
 #         },
 #         {
 #             "$project": {
-#                 '_id': 0  # הסתרת מזהה
+#                 '_id': 0
 #             }
 #         }
 #     ]))
