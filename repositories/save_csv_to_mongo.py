@@ -34,7 +34,6 @@ def init_car_accidents():
             'contributory_cause': row['PRIM_CONTRIBUTORY_CAUSE'],
             'injury_id': injury_id
        }
-
        try:
            accidents_area.insert_one(accident_area).inserted_id
        except Exception as e:

@@ -1,5 +1,5 @@
 from flask import Flask
-from routes.accident_route import accidents_bp
+from routes.accident_route import accidents_bp, init_db
 from routes.injury_route import injury_bp
 
 app = Flask(__name__)
