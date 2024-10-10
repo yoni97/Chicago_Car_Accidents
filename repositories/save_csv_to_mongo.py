@@ -13,14 +13,10 @@ def init_car_accidents():
    accidents_area.drop()
    injuries.drop()
 
-   try:
-       db.accidents_area.create_index('beet_of_occurrence', 1)
-       db.injuries.create_index('crash_date', 1)
-       print("Indexes created successfully")
-   except Exception as e:
-       print(f"Error creating indexes: {e}")
+   accidents_area.create_index('beet_of_occurrence')
+   injuries.create_index('crash_date')
 
-   for row in read_csv('../csv_files/Traffic_Crashes.csv'):
+   for row in read_csv('csv_files/Traffic_Crashes.csv'):
 
        injury = {
            'injuries_total': row['INJURIES_TOTAL'],
@@ -46,6 +42,4 @@ def init_car_accidents():
 
 
 
-
-init_car_accidents()
 

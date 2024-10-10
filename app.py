@@ -1,14 +1,15 @@
 from flask import Flask
-from ropositories.save_csv_to_mongo import init_car_accidents
+from routes.accident_route import accidents_bp
+from routes.injury_route import injury_bp
 
 app = Flask(__name__)
 
+app.register_blueprint(accidents_bp)
+app.register_blueprint(injury_bp)
 
-@app.route('/')
-def init_db():
-    init_car_accidents()
-    return 'welcomev to car accidends analystics!'
+
 
 
 if __name__ == '__main__':
+    init_db()
     app.run()
