@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from repositories.accident_repo import count_accident_by_period, count_accidents_by_cause, find_accident_by_id
+from repositories.accident_repo import count_accident_by_period
 
 
 def sum_accidents_by_area_and_period(area, date_str, period):
@@ -24,19 +24,6 @@ def sum_accidents_by_area_and_period(area, date_str, period):
         'date': date_str
     }
 
-def get_accidents_groupe_by_cause(area):
-    causes = ['FAILING TO REDUCE SPEED TO AVOID CRASH', 'UNDER THE INFLUENCE OF ALCOHOL/DRUGS']
-    results = {}
-    for cause in causes:
-        count = count_accidents_by_cause(area, cause)
-        results[cause] = count
 
-    return results
 
-def get_accident_details(id):
-    accident = find_accident_by_id(id)
-    if accident:
-        return {
-            'id': str(accident['_id']),
-        }
-    return None
+
