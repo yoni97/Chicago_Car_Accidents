@@ -1,4 +1,6 @@
 import csv
+from datetime import datetime
+
 from db.database import injuries, accidents_area
 
 
@@ -7,6 +9,11 @@ def read_csv(csv_path):
        csv_reader = csv.DictReader(file)
        for row in csv_reader:
            yield row
+
+def parse_date(date_str: str):
+    has_seconds = len(date_str.split(' ')) > 2
+    date_format = '%m/%d/%Y %H:%M:%S %p' if has_seconds else '%m/%d/%Y %H:%M'
+    return datetime.strptime(date_str, date_format)
 
 def init_car_accidents():
    accidents_area.drop()
@@ -29,7 +36,7 @@ def init_car_accidents():
 
        accident_area = {
             'beet_of_occurrence': row['BEAT_OF_OCCURRENCE'],
-            'crash_date': row['CRASH_DATE'],
+            'crash_date': parse_date(row['CRASH_DATE']),
             'contributory_cause': row['PRIM_CONTRIBUTORY_CAUSE'],
             'injury_id': injury_id
        }

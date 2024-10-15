@@ -7,8 +7,7 @@ def count_accident_by_beat(area):
         'beat': area,
         'count accidents': res
     }
-
-def count_accident_by_period(area, start_date, end_date):
+def count_accident_by_period1(area, start_date, end_date):
     return accidents_area.count_documents({
         'beet_of_occurrence': area,
         'crash_date': {
@@ -16,6 +15,16 @@ def count_accident_by_period(area, start_date, end_date):
             '$lt': end_date
         }
     })
+
+def count_accident_by_period(area, start_date, end_date):
+    crashes_list = list(accidents_area.find({
+        'beet_of_occurrence': area,
+        'crash_date': {
+            '$gte': start_date,
+            '$lt': end_date
+        }
+    }))
+    return len(crashes_list)
 
 def find_accident_by_area(beat):
     query = [

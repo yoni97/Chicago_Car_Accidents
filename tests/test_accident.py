@@ -50,11 +50,6 @@ def test_init_car_accidents(mongo_client, csv_file):
 
 
 
-
-
-
-
-
 def count_accident_by_beat(area, accidents_area):
     res = accidents_area.count_documents({'beet_of_occurrence': str(area)})
     return {
@@ -83,21 +78,6 @@ def test_count_accident_by_beat(mongo_client):
     result = count_accident_by_beat('9999', accidents_area)
     assert result['count accidents'] == 0
     assert result['beat'] == '9999'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -152,22 +132,6 @@ def test_count_accident_by_period(mongo_client):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def find_accident_by_area(beat, accidents_area):
     query = [
         {"$match": {
@@ -217,24 +181,6 @@ def test_find_accident_by_area(mongo_client):
     ]
 
     assert result == expected_result
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

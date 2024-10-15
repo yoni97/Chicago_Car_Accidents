@@ -8,7 +8,7 @@ accidents_bp = Blueprint('accidents_bp', __name__)
 @accidents_bp.route('/')
 def init_db():
     init_car_accidents()
-    return jsonify('welcome to car accidends analystics!\n data is initial succesfully'), 201
+    return jsonify(f'welcome to car accidends analystics!{'\n'} data is initial succesfully'), 201
 
 @accidents_bp.route('/accidents/<string:area>', methods=['GET'])
 def get_accident_by_beat(area):
@@ -20,7 +20,7 @@ def sum_accidents():
     data = request.get_json()
     area = data.get('area')
     date_str = data.get('date')
-    period = data.get('period')  # "day", "week", "month"
+    period = data.get('period')
 
     if not area or not date_str or not period:
         return jsonify({"error": "Missing area, date or period parameter"}), 400

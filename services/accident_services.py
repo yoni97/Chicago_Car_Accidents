@@ -2,7 +2,11 @@ from datetime import datetime, timedelta
 from repositories.accident_repo import count_accident_by_period, get_injury_stats_repo, get_crashes_from_db
 from bson import ObjectId
 
-
+def parse_date(date_str: str):
+    has_seconds = len(date_str.split(' ')) > 2
+    date_format = '%m/%d/%Y %H:%M:%S %p' if has_seconds else '%m/%d/%Y %H:%M'
+    print(date_format)
+    return datetime.strptime(date_str, date_format)
 
 def sum_accidents_by_area_and_period(area, date_str, period):
     try:
