@@ -1,10 +1,7 @@
-from bson import ObjectId
 from flask import Blueprint, jsonify, request
-
-from db.database import injuries
 from repositories.accident_repo import count_accident_by_beat, find_accident_by_area
-from repositories.save_csv_to_mongo import init_car_accidents
-from services.accident_services import sum_accidents_by_area_and_period
+from repositories.save_csv_to_mongo import init_car_accidents, init_car_accidents_big_data
+from services.accident_services import sum_accidents_by_area_and_period, get_crash_stats_service
 
 accidents_bp = Blueprint('accidents_bp', __name__)
 
@@ -40,61 +37,11 @@ def get_accidents_by_cause(beat):
 
 @accidents_bp.route('/injuries/cause/<string:beat>', methods=['GET'])
 def get_crash_stats(beat):
-    crashes_list = list(injuries.aggregate([
-        {"$lookup": {'from': 'accidents_area', 'localField': 'injury_id', 'foreignField': '_id', 'as': 'beat'}},
-        {'$match': {'beat.beet_of_occurrence': beat}},
-        {'$project':{'_id':0, 'injury_id':0, 'accidents_area._id': 0}},
-            {'$group':{'_id':None,
-                'injuries_total':{'$sum':'$injuries.injuries_total'},
-                   'injuries_fatal': {'$sum': '$injuries.injuries_fatal'},
-                   'total_non_fatal_injuries': {'$sum': {'$subtract': ['$injuries.injuries_total', '$injuries.injuries_fatal']}},
-                   'crashes': {'$push': {'crash': '$$ROOT'}}}},
-        {'$project':{'_id':0}}
-    ]))
-    return crashes_list
+    crashes_list = get_crash_stats_service(beat)
+    return jsonify(crashes_list)
 
 
 
-# def get_crash_stats(beat):
-#     crashes_list = list(injuries.aggregate([
-#         {
-#             "$lookup": {
-#                 'from': 'accidents',
-#                 'localField': 'injury_id',
-#                 'foreignField': 'injury_id',
-#                 'as': 'accident_info'
-#             }
-#         },
-#         {
-#             "$unwind": {
-#                 "path": "$accident_info",
-#                 "preserveNullAndEmptyArrays": True
-#             }
-#         },
-#         {
-#             "$match": {
-#                 'accident_info.beet_of_occurrence': beat
-#             }
-#         },
-#         {
-#             "$group": {
-#                 '_id': None,
-#                 'injuries_total': {'$sum': '$injuries_total'},
-#                 'injuries_fatal': {'$sum': '$injuries_fatal'},
-#                 'total_non_fatal_injuries': {
-#                     '$sum': {'$subtract': ['$injuries_total', '$injuries_fatal']}
-#                 },
-#                 'crashes': {'$push': {
-#                     'crash_date': '$accident_info.crash_date',
-#                     'contributory_cause': '$accident_info.contributory_cause',
-#                     'injury_id': '$injury_id'
-#             }
-#         },
-#         {
-#             "$project": {
-#                 '_id': 0
-#             }
-#         }
-#     ]))
-#
-#     return crashes_list
+
+
+

@@ -11,5 +11,4 @@ app.register_blueprint(injury_bp)
 
 
 if __name__ == '__main__':
-    init_db()
     app.run()
